@@ -1,0 +1,333 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>高雄母女兩天一夜</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;800&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: harbor timetable — a vertical route line, stops as cards, legs (commute) printed between stops like a transit board */
+:root{
+  --bg:#eef3f4; --surface:#ffffff; --ink:#13283a; --muted:#5d7180; --line:#cbd8dd;
+  --harbor:#0f6d86; --harbor-soft:#dcecf0;
+  --walk:#1f9d6b; --walk-soft:#dff3ea;
+  --signal:#d8413a; --signal-soft:#fbe5e3;
+  --mom:#a2589a; --mom-soft:#f4e5f2;
+  --f-display:"Noto Serif TC","Songti TC",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1820; --surface:#13232e; --ink:#e4eef2; --muted:#93a8b4; --line:#26404e;
+  --harbor:#4fb6d0; --harbor-soft:#163746; --walk:#4fcf9a; --walk-soft:#123628;
+  --signal:#ff7a70; --signal-soft:#3a1c1b; --mom:#e09ad7; --mom-soft:#36203a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1820; --surface:#13232e; --ink:#e4eef2; --muted:#93a8b4; --line:#26404e;
+  --harbor:#4fb6d0; --harbor-soft:#163746; --walk:#4fcf9a; --walk-soft:#123628;
+  --signal:#ff7a70; --signal-soft:#3a1c1b; --mom:#e09ad7; --mom-soft:#36203a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:620px;margin:0 auto;display:grid;gap:18px}
+header h1{font-family:var(--f-display);font-weight:800;font-size:1.75rem;line-height:1.25;margin:0;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.now{background:var(--harbor);color:#fff;border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.now small{opacity:.85;font-size:.78rem;letter-spacing:.08em}
+.now b{font-size:1.1rem}
+.now .next{font-size:.85rem;opacity:.9}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;display:grid;gap:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabs,.who{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button,.who button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:6px 14px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.who button[aria-pressed="true"]{background:var(--harbor-soft);border-color:var(--harbor);color:var(--harbor);font-weight:700}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--harbor);outline-offset:2px}
+.route{display:grid;gap:0;position:relative}
+.stop{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:8px;position:relative}
+.stop.current{border-color:var(--harbor);box-shadow:0 0 0 2px var(--harbor)}
+.stop.done{opacity:.55}
+.stop-head{display:flex;gap:12px;align-items:flex-start}
+.time{font-family:var(--f-mono);font-weight:600;font-size:1rem;color:var(--harbor);min-width:3.2em;padding-top:1px}
+.stop-title{flex:1;min-width:0}
+.stop-title h3{margin:0;font-size:1.02rem;line-height:1.4}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:700;letter-spacing:.04em}
+.t-both{background:var(--harbor-soft);color:var(--harbor)}
+.t-me{background:var(--signal-soft);color:var(--signal)}
+.t-mom{background:var(--mom-soft);color:var(--mom)}
+.check{width:22px;height:22px;accent-color:var(--harbor);margin-top:2px;flex:none}
+.desc{margin:0;color:var(--ink)}
+.place{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.88rem;color:var(--muted)}
+.place a,.food a{color:var(--harbor);font-weight:700;text-decoration:none;white-space:nowrap}
+.food{background:var(--bg);border-radius:10px;padding:10px 12px;display:grid;gap:6px;font-size:.9rem}
+.food .lbl{font-size:.72rem;color:var(--muted);letter-spacing:.08em;font-weight:700}
+.food .row{display:grid;gap:2px}
+.food .name{font-weight:700}
+.food .why{color:var(--muted)}
+details{font-size:.88rem}
+summary{cursor:pointer;color:var(--muted);font-weight:700}
+details p,details ul{margin:6px 0 0;padding-left:1.1em}
+.leg{display:flex;gap:12px;align-items:center;padding:6px 0 6px 28px;position:relative;font-size:.84rem;color:var(--muted)}
+.leg::before{content:"";position:absolute;left:12px;top:0;bottom:0;border-left:2px dashed var(--line)}
+.leg .mins{font-family:var(--f-mono);font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:0 6px;white-space:nowrap}
+.leg.walk .mins{border-color:var(--walk);color:var(--walk)}
+.split{font-family:var(--f-display);font-weight:800;font-size:1.05rem;margin:14px 0 6px;color:var(--mom)}
+.signals{display:grid;gap:10px}
+.sig{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.sig .num{width:30px;height:30px;border-radius:50%;border:2px solid var(--signal);color:var(--signal);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;flex:none}
+.sig .txt{flex:1;min-width:0}
+.sig .txt b{display:block}
+.sig .txt span{font-size:.82rem;color:var(--muted)}
+.sig.got .num{background:var(--signal);color:#fff}
+.note{font-size:.84rem;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:10px 12px}
+.progress{font-family:var(--f-mono);color:var(--signal);font-weight:600}
+footer{font-size:.78rem;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.stop{transition:opacity .2s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>高雄兩天一夜</h1>
+    <p>10/31（六）– 11/1（日）· 住宿：高雄中央公園英迪格酒店（捷運中央公園站旁）</p>
+  </header>
+
+  <div class="now" id="now" aria-live="polite"></div>
+
+  <div class="bar">
+    <div class="tabs" role="group" aria-label="切換頁面">
+      <button id="tab-d1" data-tab="d1">10/31 六</button>
+      <button id="tab-d2" data-tab="d2">11/1 日</button>
+      <button id="tab-sig" data-tab="sig">藤井風應援</button>
+    </div>
+    <div class="who" role="group" aria-label="看誰的行程" id="whoBar">
+      <button id="who-all" data-who="all">全部</button>
+      <button id="who-me" data-who="me">我</button>
+      <button id="who-mom" data-who="mom">媽媽</button>
+    </div>
+  </div>
+
+  <main id="view"></main>
+
+  <footer>營業時間與班次以現場公告為準。打勾紀錄只存在你自己的手機上。</footer>
+</div>
+
+<script>
+const gm = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+
+// who: both | me | mom.  leg = commute to the NEXT stop (shown below the card)
+const D1 = [
+ {id:"a1",t:"2026-10-31T09:30",who:"both",title:"台北搭高鐵出發",desc:"11:05 抵達左營站。",
+  leg:{mins:"95 分",how:"高鐵 台北 → 左營"}},
+ {id:"a1b",t:"2026-10-31T11:05",who:"both",title:"左營站應援打卡",place:"捷運左營站",map:"捷運左營站",fk:true,
+  desc:"藤井風「歡迎打卡背板」只擺 10/30–10/31，下高鐵順路拍一張。同一處有夜市商圈優惠券，記得拿，今晚宵夜用得到。",
+  leg:{mins:"25 分",how:"紅線 左營（R16）→ 中央公園（R9），出站步行 1 分"}},
+ {id:"a2",t:"2026-10-31T11:40",who:"both",title:"飯店寄放行李",place:"高雄中央公園英迪格酒店",map:"高雄中央公園英迪格酒店",
+  desc:"先寄行李，輕裝出門。一般 15:00 後才能入住，媽媽下午回來再辦。",
+  leg:{mins:"25 分",how:"紅線 中央公園 → 美麗島，轉橘線到鹽埕埔（O2），1 號出口步行約 10 分到大義倉庫"}},
+ {id:"a3",t:"2026-10-31T12:10",who:"both",title:"駁二午餐",place:"駁二大義倉庫",map:"典藏駁二餐廳 ARTCO",
+  food:{lbl:"午餐 · 每人約 400–700",main:{n:"典藏駁二餐廳 ARTCO",w:"大義倉庫第一間、大港橋正對面。挑高倉庫配裝置藝術，義大利麵和燉飯為主，好拍又坐得舒服。週二公休，週六有營業。",q:"典藏駁二餐廳 ARTCO"},
+   alt:{n:"小紅麵店（棧貳庫內）",w:"老牌紅毛港海鮮餐廳的副牌，想吃台式海鮮選這間，吃完就在下午茶的地方。",q:"棧貳庫 小紅麵店"}},
+  leg:{mins:"步行",how:"吃完直接在大義倉庫一帶逛",walk:true}},
+ {id:"a4",t:"2026-10-31T12:55",who:"both",title:"逛駁二＋走大港橋",place:"大義倉庫 → 大港橋",map:"大港橋 高雄",
+  desc:"大義倉庫文創小店、大義公園尾端看港（85 大樓、高流都在視線裡）。走過白色的大港橋到棧貳庫，橋上很好拍。",
+  rain:"直接待在倉庫室內逛，大港橋拍一張就走。",
+  leg:{mins:"10 分",how:"步行過大港橋到棧貳庫",walk:true}},
+ {id:"a5",t:"2026-10-31T13:30",who:"both",title:"港景下午茶",place:"棧貳庫 KW2",map:"棧貳庫 KW2",
+  food:{lbl:"下午茶 · 每人約 500–800",main:{n:"棧貳庫內面港座位",w:"整排倉庫正對高雄港，室內吹冷氣看船進出。到現場挑一間靠窗的咖啡或甜點店，外面就是白色旋轉木馬。",q:"棧貳庫 KW2"},
+   alt:{n:"海嘯咖啡 HI HSIAO CAFE",w:"西子灣哨船街的海景咖啡廳，招牌是可頌鬆餅，部分餐點用愛馬仕盤子裝。11:00–18:00、週一二休。從棧貳庫搭計程車約 5 分。",q:"海嘯咖啡 HI HSIAO CAFE 哨船街"}},
+  leg:{mins:"10 分",how:"計程車到 ⑤ 海邊路 × 青年二路（叫車時說「青年二路口海邊路」）"}},
+ {id:"a6",t:"2026-10-31T14:20",who:"both",title:"藤井風路口踩點 ⑤ → ①",place:"愛河出海口一帶，全程約 1.8 公里",map:"真愛碼頭 高雄",
+  desc:"從 ⑤ 往回走到 ①，邊走邊拍。每個路口的走法在「藤井風路口」分頁，可以邊走邊打勾。",
+  rain:"改成計程車逐一停靠，下車拍完就走；或只拍 ①②③（都在愛河兩岸，彼此最近）。",
+  note:"時間最緊的一段：15:05 要到 ①。拍太久就跳過 ④，從 ⑤ 直接走五福四路到 ③。",
+  leg:{mins:"3 分",how:"從 ① 公園二路 × 大勇路走到鹽埕埔站",walk:true}},
+ {split:"15:10 分頭行動"},
+ {id:"a7",t:"2026-10-31T15:10",who:"me",title:"出發去世運主場館",place:"高雄國家體育場（世運主場館）",map:"高雄國家體育場 世運主場館",
+  desc:"16:00 開放入場、19:00 開演。鹽埕埔和世運兩站都有藤井風獻聲的捷運廣播（10/17–10/31），在月台留意聽。路上先買好輕食和水帶著。",fk:true,
+  food:{lbl:"演唱會前輕食",main:{n:"鹽埕埔站附近超商",w:"飯糰、麵包和水，邊排隊邊吃最省時間。入場可帶什麼以主辦公告為準。",q:"鹽埕埔站 便利商店"},
+   alt:{n:"世運站 1 號出口附近超商",w:"出站往場館的路上補給，但演唱會當天人潮多、要排隊。",q:"捷運世運站"}},
+  leg:{mins:"約 45 分",how:"橘線 鹽埕埔 → 美麗島，轉紅線到世運（R17）約 30 分，1 號出口步行 10–15 分"}},
+ {id:"a8",t:"2026-10-31T16:00",who:"me",title:"入場 · 19:00 藤井風 Prema World Tour",place:"世運主場館",map:"高雄國家體育場 世運主場館",
+  desc:"10/31 現場還有一個未公開的應援驚喜。散場人潮很大，回程捷運要排隊，手機記得充飽電。",fk:true,
+  leg:{mins:"約 25 分",how:"散場後紅線 世運 → 美麗島（R10），出站就是六合夜市"}},
+ {id:"a9",t:"2026-10-31T22:15",who:"me",title:"宵夜",place:"六合夜市",map:"六合夜市",
+  food:{lbl:"宵夜",main:{n:"六合夜市",w:"在美麗島站，回飯店順路下車，吃到很晚都有攤位。用中午在左營站拿的夜市商圈優惠券。",q:"六合夜市"},
+   alt:{n:"飯店頂樓高空酒吧",w:"太累就直接回飯店，上頂樓喝一杯看夜景。",q:"高雄中央公園英迪格酒店"}},
+  leg:{mins:"5 分",how:"紅線 美麗島 → 中央公園，一站"}},
+ {id:"a10",t:"2026-10-31T23:00",who:"me",title:"回飯店休息"},
+ {id:"m1",t:"2026-10-31T15:10",who:"mom",title:"媽媽搭捷運回飯店",place:"鹽埕埔站 → 中央公園站",map:"高雄中央公園英迪格酒店",
+  desc:"在櫃檯辦入住、拿行李進房間，休息一下。",
+  leg:{mins:"15 分",how:"橘線 鹽埕埔 → 美麗島，轉紅線一站到中央公園"}},
+ {id:"m2",t:"2026-10-31T16:30",who:"mom",title:"逛新堀江、玉竹商圈",place:"飯店旁邊就是",map:"新堀江商圈",
+  desc:"出飯店步行就到。想逛百貨的話，大立和漢神也都在附近。",
+  rain:"改去大立或漢神百貨室內逛。",
+  leg:{mins:"5–10 分",how:"步行",walk:true}},
+ {id:"m3",t:"2026-10-31T18:00",who:"mom",title:"媽媽晚餐",place:"新堀江一帶",map:"公寓咖啡 前金區仁義街227號",
+  food:{lbl:"晚餐 · 一個人也好進去",main:{n:"公寓咖啡",w:"前金區仁義街的老屋咖啡館，有餐點，一個人坐也自在。11:30–23:30。",q:"公寓咖啡 前金區仁義街227號"},
+   alt:{n:"阿霞燒肉飯",w:"新興區復興一路的在地老店，晚上 16:00–19:30，想吃道地小吃選這間，要早點去。",q:"阿霞燒肉飯 復興一路70號"}},
+  leg:{mins:"10 分",how:"步行回飯店",walk:true}},
+ {id:"m4",t:"2026-10-31T19:30",who:"mom",title:"回飯店休息",desc:"女兒大約 23:00 回來。"}
+];
+
+const D2 = [
+ {id:"b1",t:"2026-11-01T08:30",who:"both",title:"和媽媽騎 Ubike 遊愛河",place:"中央公園站借車",map:"捷運中央公園站 YouBike",
+  desc:"往西騎到愛河 → 沿河岸往南 → 經過高雄橋、真愛碼頭 → 到愛河出海口看港 → 往回騎到五福路一帶還車。約 6–8 公里，配合媽媽慢慢騎，9:45 前還車。早上河邊人少，最好拍。",
+  rain:"改成散步到 CALL ME 附近的咖啡廳先坐，或直接在飯店多休息。",
+  note:"媽媽若騎累了，從真愛碼頭往回就好，不一定要騎到出海口。",
+  leg:{mins:"10 分",how:"在五福路一帶還車，步行到前金區仁義街",walk:true}},
+ {id:"b3",t:"2026-11-01T10:00",who:"both",title:"早午餐",place:"前金區仁義街",map:"CALL ME 早午餐 前金區仁義街206號",
+  food:{lbl:"早午餐 · 每人約 300–500",main:{n:"CALL ME 早午餐",w:"巷弄裡的早午餐店，吐司和果醬、太妃糖醬都是自己做的。10:00–15:00、週四休。",q:"CALL ME 早午餐 前金區仁義街206號"},
+   alt:{n:"興隆居",w:"六合二路的一甲子早餐老店，招牌湯包和燒餅。11:30 就收、常大排隊，騎完車早點到才吃得到。",q:"興隆居 六合二路186號"}},
+  leg:{mins:"10 分",how:"步行回飯店",walk:true}},
+ {id:"b4",t:"2026-11-01T10:50",who:"both",title:"退房、行李寄放櫃檯",
+  leg:{mins:"約 30 分",how:"紅線 中央公園 → 美麗島，轉橘線到西子灣（O1），步行約 10 分到鼓山輪渡站，渡輪約 5 分（單程 30 元）"}},
+ {id:"b5",t:"2026-11-01T11:30",who:"both",title:"旗津散步",place:"旗津老街、天后宮",map:"旗津天后宮",
+  desc:"下船就是廟前路老街，天后宮有 300 多年歷史。有力氣可以爬上旗後燈塔，從上面看整個高雄港和大港橋。",
+  rain:"取消旗津，改去棧貳庫、大港橋一帶室內逛，或回新堀江。",
+  leg:{mins:"步行",how:"在廟前路上",walk:true}},
+ {id:"b6",t:"2026-11-01T12:15",who:"both",title:"旗津海鮮午餐",place:"廟前路海產街",map:"旗津 廟前路 海產",
+  food:{lbl:"午餐 · 每人約 400–600",main:{n:"廟前路海產街",w:"一排海產店，門口挑現撈海鮮現點現做。點之前先問清楚價錢，再加一盤旗津特色的番茄切盤（沾醬油膏糖粉）。",q:"旗津 廟前路 海產"},
+   alt:{n:"海岸線咖啡（燈塔店）",w:"在高雄燈塔園區裡，邊喝飲料邊看港，適合吃輕一點。10:00–21:00。",q:"高雄燈塔 旗後燈塔"}},
+  leg:{mins:"約 35 分",how:"渡輪回鼓山 → 步行到西子灣站 → 橘線轉紅線回中央公園"}},
+ {id:"b7",t:"2026-11-01T14:15",who:"both",title:"回飯店拿行李",
+  leg:{mins:"約 18 分",how:"紅線 中央公園 → 巨蛋（R14），先不坐到左營"}},
+ {id:"b7b",t:"2026-11-01T14:40",who:"both",title:"巨蛋站應援拍照",place:"捷運巨蛋站",map:"捷運巨蛋站",fk:true,
+  desc:"藤井風電視牆壁貼在 2 號出口、月台玻璃貼在往小港方向月台，展到 11/4。拖著行李就在站內拍，不用出站太遠。",
+  leg:{mins:"約 8 分",how:"紅線 巨蛋 → 左營（R16），兩站"}},
+ {id:"b8",t:"2026-11-01T15:05",who:"both",title:"左營站買伴手禮",place:"高鐵左營站",map:"高鐵左營站",
+  desc:"站內有伴手禮店，挑好再進站，還有 50 分鐘。",
+  leg:{mins:"—",how:"進站"}},
+ {id:"b9",t:"2026-11-01T15:55",who:"both",title:"搭高鐵回台北"}
+];
+
+const SIGS = [
+ {n:5,name:"海邊路 × 青年二路",how:"起點，計程車在這裡下車",q:"海邊路 青年二路 高雄"},
+ {n:4,name:"海邊路 × 英雄路",how:"沿海邊路往北走約 5 分",q:"海邊路 英雄路 高雄"},
+ {n:3,name:"五福四路 × 河東路",how:"往西北走約 8 分，到愛河東岸",q:"五福四路 河東路 高雄"},
+ {n:2,name:"公園二路 × 五福四路",how:"走五福四路過高雄橋，約 5 分",q:"公園二路 五福四路 高雄"},
+ {n:1,name:"公園二路 × 大勇路",how:"沿公園二路往西約 10 分，終點，旁邊就是鹽埕埔站",q:"公園二路 大勇路 高雄"}
+];
+
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+let done = store.get("khh-done",{});
+let tab = store.get("khh-tab","d1");
+let who = store.get("khh-who","all");
+
+function taipeiNow(){
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+const hm = t => t.slice(11,16);
+const visible = s => who==="all" || s.who==="both" || s.who===who;
+const tagOf = w => w==="both"?'<span class="tag t-both">一起</span>':w==="me"?'<span class="tag t-me">只有我</span>':'<span class="tag t-mom">只有媽媽</span>';
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function currentId(list){
+  const now = taipeiNow(); let cur=null;
+  list.filter(s=>s.id && visible(s)).sort((a,b)=>a.t<b.t?-1:1).forEach(s=>{ if(s.t<=now) cur=s.id; });
+  return cur;
+}
+
+function foodHTML(f){
+  const row=(x,label)=>`<div class="row"><span class="lbl">${label}</span><span class="name">${esc(x.n)} <a href="${gm(x.q)}" target="_blank" rel="noopener">導航 ↗</a></span><span class="why">${esc(x.w)}</span></div>`;
+  return `<div class="food"><span class="lbl">${esc(f.lbl)}</span>${row(f.main,"主推")}${row(f.alt,"備案")}</div>`;
+}
+
+function stopHTML(s,cur){
+  const c = !!done[s.id];
+  return `<article class="stop${s.id===cur?" current":""}${c?" done":""}" id="stop-${s.id}">
+    <div class="stop-head">
+      <span class="time">${hm(s.t)}</span>
+      <div class="stop-title"><h3>${esc(s.title)}</h3><div class="tags">${tagOf(s.who)}${s.fk?'<span class="tag t-me">藤井風應援</span>':""}${s.id===cur?'<span class="tag t-both">現在</span>':""}</div></div>
+      <input type="checkbox" class="check" id="chk-${s.id}" data-id="${s.id}" ${c?"checked":""} aria-label="完成：${esc(s.title)}">
+    </div>
+    ${s.place?`<div class="place">📍 ${esc(s.place)}${s.map?` <a href="${gm(s.map)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:""}</div>`:""}
+    ${s.desc?`<p class="desc">${esc(s.desc)}</p>`:""}
+    ${s.note?`<div class="note">${esc(s.note)}</div>`:""}
+    ${s.food?foodHTML(s.food):""}
+    ${s.rain?`<details><summary>下雨怎麼辦</summary><p>${esc(s.rain)}</p></details>`:""}
+  </article>`;
+}
+function legHTML(l){return `<div class="leg${l.walk?" walk":""}"><span class="mins">${esc(l.mins)}</span><span>${esc(l.how)}</span></div>`}
+
+function renderDay(list){
+  const cur = currentId(list);
+  let out='<div class="route">';
+  if(list===D1){
+    const common = list.filter(s=>s.id && s.who==="both");
+    const me = list.filter(s=>s.who==="me"), mom = list.filter(s=>s.who==="mom");
+    const block = arr => arr.map(s=>stopHTML(s,cur)+(s.leg?legHTML(s.leg):"")).join("");
+    out += block(common);
+    if(who!=="mom") out += `<div class="split" style="color:var(--signal)">15:10 起 · 我去演唱會</div>`+block(me);
+    if(who!=="me") out += `<div class="split">15:10 起 · 媽媽自由行動</div>`+block(mom);
+  } else {
+    const arr = list.filter(s=>s.id && visible(s));
+    out += arr.map((s,i)=>stopHTML(s,cur)+(s.leg&&i<arr.length-1?legHTML(s.leg):"")).join("");
+  }
+  return out+'</div>';
+}
+
+const FK = [
+ {n:"01",name:"電視牆壁貼",when:"10/5–11/4",where:"捷運巨蛋站 2 號出口",plan:"11/1 14:40 回程順路拍"},
+ {n:"02",name:"月台玻璃貼",when:"10/5–11/4",where:"捷運巨蛋站（往小港月台）",plan:"11/1 14:40 回程順路拍"},
+ {n:"03",name:"歡迎打卡背板＆夜市商圈優惠券",when:"10/30–10/31",where:"捷運左營站",plan:"10/31 11:05 下高鐵就拍，優惠券宵夜用"},
+ {n:"04",name:"藤井風獻聲捷運廣播",when:"10/17–10/31",where:"全線月台，車廂廣播在三多商圈、後驛、生態園區、世運、鹽埕埔、文化中心",plan:"10/31 15:10 鹽埕埔上車、世運下車時留意聽"},
+ {n:"05",name:"主題行人號誌燈",when:"10/26–10/31",where:"5 個路口共 18 面",plan:"10/31 14:20 從 ⑤ 走到 ①（清單在下面）"},
+ {n:"06",name:"未公開驚喜",when:"10/31",where:"演唱會現場",plan:"10/31 到場揭曉"}
+];
+function renderSig(){
+  const got = SIGS.filter(s=>done["sig"+s.n]).length;
+  const fkGot = FK.filter(f=>done["fk"+f.n]).length;
+  return `<div class="signals">
+    <div class="progress">應援項目 ${fkGot} / 6</div>
+    ${FK.map(f=>`<div class="sig${done["fk"+f.n]?" got":""}">
+      <span class="num" style="font-size:.78rem">${f.n}</span>
+      <div class="txt"><b>${esc(f.name)}</b><span>${esc(f.when)} · ${esc(f.where)}</span><br><span style="color:var(--harbor);font-weight:700">→ ${esc(f.plan)}</span></div>
+      <input type="checkbox" class="check" id="chk-fk${f.n}" data-id="fk${f.n}" ${done["fk"+f.n]?"checked":""} aria-label="完成 ${esc(f.name)}">
+    </div>`).join("")}
+    <div class="split" style="color:var(--signal)">行人號誌路口 ⑤ → ①</div>
+    <div class="note">官方應援，展示到 <b>10/31</b>，11/1 可能已撤掉，所以排在 10/31 下午踩完。</div>
+    <div class="progress">已踩 ${got} / 5</div>
+    ${SIGS.map(s=>`<div class="sig${done["sig"+s.n]?" got":""}">
+      <span class="num">${s.n}</span>
+      <div class="txt"><b>${esc(s.name)}</b><span>${esc(s.how)}</span> <a href="${gm(s.q)}" target="_blank" rel="noopener" style="color:var(--harbor);font-weight:700;text-decoration:none;font-size:.82rem">導航 ↗</a></div>
+      <input type="checkbox" class="check" id="chk-sig${s.n}" data-id="sig${s.n}" ${done["sig"+s.n]?"checked":""} aria-label="已踩 ${esc(s.name)}">
+    </div>`).join("")}
+    <div class="note">拍照時站在人行道上，不要跨進車道。</div>
+  </div>`;
+}
+
+function renderNow(){
+  const now = taipeiNow(); const el=document.getElementById("now");
+  const all=[...D1,...D2].filter(s=>s.id && visible(s)).sort((a,b)=>a.t<b.t?-1:1);
+  if(now < all[0].t){
+    const days = Math.ceil((new Date(all[0].t+"+08:00") - new Date())/86400000);
+    el.innerHTML=`<small>出發倒數</small><b>還有 ${days} 天</b><span class="next">10/31 09:30 台北高鐵出發，11:05 到左營</span>`; return;
+  }
+  let cur=null,next=null; all.forEach(s=>{ if(s.t<=now) cur=s; else if(!next) next=s; });
+  if(!next && now>"2026-11-01T17:00"){ el.innerHTML=`<small>行程結束</small><b>平安回家 🚄</b>`; return; }
+  el.innerHTML=`<small>現在該做什麼 · ${hm(now)}</small><b>${esc(cur.title)}</b>${next?`<span class="next">下一站 ${hm(next.t)}　${esc(next.title)}</span>`:""}`;
+}
+
+function render(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tab===tab));
+  document.querySelectorAll(".who button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.who===who));
+  document.getElementById("whoBar").hidden = tab==="sig";
+  document.getElementById("view").innerHTML = tab==="d1"?renderDay(D1):tab==="d2"?renderDay(D2):renderSig();
+  renderNow();
+}
+
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;tab=b.dataset.tab;store.set("khh-tab",tab);render();window.scrollTo({top:0})});
+document.getElementById("whoBar").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;who=b.dataset.who;store.set("khh-who",who);render()});
+document.getElementById("view").addEventListener("change",e=>{const id=e.target.dataset.id;if(!id)return;done[id]=e.target.checked;store.set("khh-done",done);render()});
+
+// open the right day automatically during the trip
+(function(){const n=taipeiNow(); if(n>="2026-11-01T00:00"&&n<"2026-11-02") tab="d2"; else if(n>="2026-10-31T00:00"&&n<"2026-11-01"&&tab==="d2") tab="d1";})();
+render();
+setInterval(renderNow,60000);
+</script>
+
+</body></html>
